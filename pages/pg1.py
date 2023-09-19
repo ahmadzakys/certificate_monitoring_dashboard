@@ -68,12 +68,34 @@ layout = html.Div([
                         style_cell={'font-family':'Verdana',
                                     'fontSize': 15,
                                     'color':'#2a3f5f'},
-                        style_data_conditional=[{'if': {'column_id': 'level_0',},
-                                                'fontWeight': 'bold'},
-                                                {'if': {'filter_query': '{level_0} eq "CTS" || {level_0} eq "Barge"',
-                                                        'column_id': ['Vessel Name','level_0','Class','Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC']},
-                                                'backgroundColor': '#F8F6F0',}
-                                                ],
+                        style_data_conditional=(
+                            [
+                                {'if': {'filter_query': '{{{col}}} eq "✔️"'.format(col=col),
+                                        'column_id': col},
+                                'backgroundColor': '#dfd'} for col in ['Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC']
+                            ] +
+                            [
+                                {'if': {'filter_query': '{{{col}}} eq "🔲"'.format(col=col),
+                                        'column_id': col},
+                                'backgroundColor': '#dfd'} for col in ['Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC']
+                            ] +
+                            [
+                                {'if': {'filter_query': '{{{col}}} eq "⚠️"'.format(col=col),
+                                        'column_id': col},
+                                'backgroundColor': '#ffd'} for col in ['Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC']
+                            ] +
+                            [
+                                {'if': {'filter_query': '{{{col}}} eq "❌"'.format(col=col),
+                                        'column_id': col},
+                                'backgroundColor': '#fdd'} for col in ['Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC']
+                            ] +
+                            [
+                                {'if': {'column_id': 'level_0',},
+                                'fontWeight': 'bold'},
+                                {'if': {'filter_query': '{level_0} eq "CTS" || {level_0} eq "Barge"',
+                                        'column_id': ['level_0']},
+                                'backgroundColor': '#F8F6F0'},    
+                            ]),
                         css=[{
                             'selector': '.dash-table-tooltip',
                             'rule': 'background-color: white; font-family: Verdana; font-size: 10; color: #2a3f5f;'}],
@@ -151,16 +173,16 @@ def update_charts(data):
 
     # New dataframe for remaining days
     diff_mv = ['Annual Survey Due Date', 'Special Survey Due Date', 'Intermediate Survey Due Date', 'Docking Survey Due Date', 'Tail Shaft Survey Due Date', 'Boiler Survey Due Date', 'COC Due Date']
-    df_diff_mv = df_mv[['Mother Vessel Name', 'Class']+diff_mv].copy()
+    df_diff_mv = df_mv[['Mother Vessel Name', 'Class', 'Remarks']+diff_mv].copy()
 
     diff_cts = ['Annual Survey Due Date', 'Special Survey Due Date', 'Intermediate Survey Due Date', 'Docking Survey Due Date', 'Cargo Gear Survey Due Date', 'COC Due Date']
-    df_diff_cts = df_cts[['CTS Name', 'Class']+diff_cts].copy()
+    df_diff_cts = df_cts[['CTS Name', 'Class', 'Remarks']+diff_cts].copy()
 
     diff_tb = ['Annual Survey Due Date', 'Special Survey Due Date', 'Intermediate Survey Due Date', 'Docking Survey Due Date', 'Tail Shaft Survey Due Date', 'COC Due Date']
-    df_diff_tb = df_tb[['Tugboat Name', 'Class']+diff_tb].copy()
+    df_diff_tb = df_tb[['Tugboat Name', 'Class', 'Remarks']+diff_tb].copy()
 
     diff_ba = ['Annual Survey Due Date', 'Special Survey Due Date', 'Intermediate Survey Due Date', 'Docking Survey Due Date', 'COC Due Date']
-    df_diff_ba = df_ba[['Barge Name', 'Class']+diff_ba].copy()
+    df_diff_ba = df_ba[['Barge Name', 'Class', 'Remarks']+diff_ba].copy()
 
     # Add new variable for remaining days
     diff_mv_name = ['Annual Survey Remain Days', 'Special Survey Remain Days', 'Intermediate Survey Remain Days', 'Docking Survey Remain Days', 'Tail Shaft Survey Remain Days', 'Boiler Survey Remain Days', 'COC Remain Days']
@@ -258,15 +280,24 @@ def update_charts(data):
                                             '⚠️' if x < 183 else '✔️'))
 
     data_mv = df_diff_mv[['Vessel Name', 'Class', 'Annual', 'Special', 'Intermediate', 'Docking', 'Tail Shaft', 'Boiler', 'COC',
-                          'Annual Survey Remain Days2', 'Special Survey Remain Days2', 'Intermediate Survey Remain Days2', 'Docking Survey Remain Days2', 'Tail Shaft Survey Remain Days2', 'Boiler Survey Remain Days2', 'COC Remain Days2']]
+                          'Annual Survey Remain Days2', 'Special Survey Remain Days2', 'Intermediate Survey Remain Days2', 'Docking Survey Remain Days2', 'Tail Shaft Survey Remain Days2', 'Boiler Survey Remain Days2', 'COC Remain Days2', 'Remarks']]
     data_cts = df_diff_cts[['Vessel Name', 'Class', 'Annual', 'Special', 'Intermediate', 'Docking', 'COC',
-                            'Annual Survey Remain Days2', 'Special Survey Remain Days2', 'Intermediate Survey Remain Days2', 'Docking Survey Remain Days2', 'Cargo Gear Survey Remain Days2', 'COC Remain Days2']]
+                            'Annual Survey Remain Days2', 'Special Survey Remain Days2', 'Intermediate Survey Remain Days2', 'Docking Survey Remain Days2', 'Cargo Gear Survey Remain Days2', 'COC Remain Days2', 'Remarks']]
     data_tb = df_diff_tb[['Vessel Name', 'Class', 'Annual', 'Special', 'Intermediate', 'Docking', 'Tail Shaft', 'COC',
-                          'Annual Survey Remain Days2', 'Special Survey Remain Days2', 'Intermediate Survey Remain Days2', 'Docking Survey Remain Days2', 'Tail Shaft Survey Remain Days2', 'COC Remain Days2']]
+                          'Annual Survey Remain Days2', 'Special Survey Remain Days2', 'Intermediate Survey Remain Days2', 'Docking Survey Remain Days2', 'Tail Shaft Survey Remain Days2', 'COC Remain Days2', 'Remarks']]
     data_ba = df_diff_ba[['Vessel Name', 'Class', 'Annual', 'Special', 'Intermediate', 'Docking', 'COC',
-                          'Annual Survey Remain Days2', 'Special Survey Remain Days2', 'Intermediate Survey Remain Days2', 'Docking Survey Remain Days2', 'COC Remain Days2']]
+                          'Annual Survey Remain Days2', 'Special Survey Remain Days2', 'Intermediate Survey Remain Days2', 'Docking Survey Remain Days2', 'COC Remain Days2', 'Remarks']]
     data = pd.concat([data_mv, data_cts, data_tb, data_ba], keys=['OGV', 'CTS', 'Tugboat', 'Barge'])
-    data.fillna({'Annual':'🔲', 'Special':'🔲', 'Intermediate':'🔲', 'Docking':'🔲', 'Tail Shaft':'🔲', 'Boiler':'🔲', 'COC':'🔲'}, inplace=True)
+    data.fillna({'Annual':'🔲', 'Special':'🔲', 'Intermediate':'🔲', 'Docking':'🔲', 'Tail Shaft':'🔲', 'Boiler':'🔲', 'COC':'🔲',
+                 'Annual Survey Remain Days2':'', 	
+                 'Special Survey Remain Days2':'',	
+                 'Intermediate Survey Remain Days2':'',	
+                 'Docking Survey Remain Days2':'',	
+                 'Tail Shaft Survey Remain Days2':'',	
+                 'Boiler Survey Remain Days2':'',
+                 'COC Remain Days2':'',
+                 'Cargo Gear Survey Remain Days2':'',
+                 'Remarks':''}, inplace=True)
     data = data.reset_index()
     
         
@@ -281,16 +312,20 @@ def update_charts(data):
 ######################
 ## 1. Tooltip
 def tooltip_table(df):
-    tooltip_conditional=[{'Annual':{'value': 'Remaining Days: {}'.format(row['Annual Survey Remain Days2'])},
-                          'Special':{'value': 'Remaining Days: {}'.format(row['Special Survey Remain Days2'])}, 
-                          'Intermediate':{'value': 'Remaining Days: {}'.format(row['Intermediate Survey Remain Days2'])}, 
-                          'Docking':{'value': 'Remaining Days: {}'.format(row['Docking Survey Remain Days2'])}, 
-                          'Tail Shaft':{'value': 'Remaining Days: {}'.format(row['Tail Shaft Survey Remain Days2'])}, 
-                          'Boiler':{'value': 'Remaining Days: {}'.format(row['Boiler Survey Remain Days2'])}, 
-                          'COC':{'value': 'Remaining Days: {}'.format(row['COC Remain Days2'])},
+    tooltip_conditional=[{'Annual':{'value': 'Remaining Days: {}  \nRemarks: {}'.format(row['Annual Survey Remain Days2'], row['Remarks']), 'type': 'markdown'},
+                          'Special':{'value': 'Remaining Days: {}  \nRemarks: {}'.format(row['Special Survey Remain Days2'], row['Remarks']), 'type': 'markdown'},
+                          'Intermediate':{'value': 'Remaining Days: {}  \nRemarks: {}'.format(row['Intermediate Survey Remain Days2'], row['Remarks']), 'type': 'markdown'}, 
+                          'Docking':{'value': 'Remaining Days: {}  \nRemarks: {}'.format(row['Docking Survey Remain Days2'], row['Remarks']), 'type': 'markdown'}, 
+                          'Tail Shaft':{'value': 'Remaining Days: {}  \nRemarks: {}'.format(row['Tail Shaft Survey Remain Days2'], row['Remarks']), 'type': 'markdown'}, 
+                          'Boiler':{'value': 'Remaining Days: {}  \nRemarks: {}'.format(row['Boiler Survey Remain Days2'], row['Remarks']), 'type': 'markdown'}, 
+                          'COC':{'value': 'Remaining Days: {}  \nRemarks: {}'.format(row['COC Remain Days2'], row['Remarks']), 'type': 'markdown'},
                           }for row in df.to_dict('records')
                         ]
+    # [{
+    #         'Remaining Days': {'value': 'Last Date: {}  \nDue Date: {}'.format(row['Last Date'], row['Due Date']), 'type': 'markdown', },
+    #     } for row in df.to_dict('records')]
     return tooltip_conditional
+
 
 # tooltip_conditional=[{'if': {'filter_query': '{Annual} eq "❌" || {Annual} eq "⚠️"',
 #                                  'column_id': 'Annual'},
