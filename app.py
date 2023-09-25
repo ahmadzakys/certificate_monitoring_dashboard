@@ -46,7 +46,8 @@ app.layout = dbc.Container([
                 ])
         ]
     ),
-], fluid=True, style={'background-color':'#F1F4F4'})
+], fluid=True, style={'background-color':'#F1F4F4', 'height':'100vh'})
+
 
 def load_google_sheets_data():
     cred_file = 'certificate-dashboard-5232e060d5ce.json'
