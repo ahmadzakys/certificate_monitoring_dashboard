@@ -113,7 +113,9 @@ layout = html.Div([
                                                                                            'color':'#2a3f5f',},
                                                                                css=[{
                                                                                    'selector': '.dash-table-tooltip',
-                                                                                   'rule': 'background-color: white; font-family: Verdana; color: #2a3f5f;'}],
+                                                                                   'rule': 'background-color: grey; font-family: monospace; color: white',
+                                                                                #    'rule': 'background-color: white; font-family: monospace; color: #2a3f5f;',
+                                                                                   }],
                                                                                tooltip_delay=0,
                                                                                tooltip_duration=None
                                                                                )))
@@ -794,7 +796,7 @@ def tooltip_table(df):
         df['Last Date'] = df['Last Date'].dt.strftime('%d/%m/%Y')
         df['Due Date'] =  df['Due Date'].dt.strftime('%d/%m/%Y')
         tooltip =[{
-            'Remaining Days': {'value': 'Last Date: {}  \n Due Date: {}'.format(row['Last Date'], row['Due Date']), 'type': 'markdown'},
+            'Remaining Days': {'value': 'Last Date: {}  \nDue Date: {}'.format(row['Last Date'], row['Due Date']), 'type': 'markdown', },
         } for row in df.to_dict('records')]
     return tooltip
 

@@ -681,7 +681,7 @@ def update_charts(data):
     for (i,j) in zip(diff_mv, diff_mv_name):
         df_diff_mv[j] = (df_diff_mv[i]-pd.to_datetime('today')).dt.days
 
-    # Add new variable for remaining days (Years, Months, Days)
+    # Add new variable for remaining days (Months, Days)
     diff_mv_name2 = ['Annual Survey Remain Days2', 'Special Survey Remain Days2', 'Intermediate Survey Remain Days2', 'Docking Survey Remain Days2', 'Tail Shaft Survey Remain Days2', 'Boiler Survey Remain Days2']
 
     # Function for calculating remaining days
