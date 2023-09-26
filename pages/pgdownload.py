@@ -271,45 +271,16 @@ def update_charts(n_clicks, data):
 
     output = ['Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC']
     output_col = ['Annual_col','Special_col','Intermediate_col','Docking_col','Tail Shaft_col','Boiler_col','COC_col']
-
-
+    
     for i,j in zip(output, output_col):
         ogv_table[j] = ogv_table[i].map(map_color)
-
-    cols_to_show = ['Type','Vessel Name','Class','Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC','Remarks']
-
+    
     # Insert color variable to a list (fill_color)
-    fill_color_ogv = []
-    n = len(ogv_table)
-    for col in cols_to_show:
-        if col not in output:
-            fill_color_ogv.append(['white']*n)
-        else:
-            fill_color_ogv.append(ogv_table[str(col)+'_col'].to_list())
-            
+    fill_color_ogv = fill_color(ogv_table)
+
     # Table and save as img
-    fig_ogv = go.Figure(
-        data=[go.Table(
-            header=dict(values=[f"<b>{col}</b>" for col in [x.upper() for x in cols_to_show]],
-                        fill_color='#2a3f5f',
-                        line_color='white',
-                        align='center',
-                        font=dict(color='white', family="Verdana", size=20),
-                        height=35,
-                        ),
-            cells=dict(values=ogv_table[cols_to_show].values.T,
-                    fill_color=fill_color_ogv,
-                    line_color='lightgrey',
-                    align='center',
-                    font=dict(color='#2a3f5f', family="Verdana", size=20),
-                    height=35
-                    ),
-            columnwidth = [1,3,1,1.5,1.5,1.5,1.5,1.5,1.5,1.5,2.5],
-        )
-            ])
-    fig_ogv.update_layout({'height':150,'width':2200,'plot_bgcolor': '#ffffff', 'paper_bgcolor': '#ffffff',
-                        'margin' : {'t':0, 'b':0, 'l':0, 'r':0}, "autosize": True})
-    pio.write_image(fig_ogv, 'img/ogv.png')
+    ogv_img = table_ogv(ogv_table, fill_color_ogv)
+    pio.write_image(ogv_img, 'img/ogv.png')
 
     ##### CTS
     # Mapping Color for each row and columns
@@ -317,37 +288,11 @@ def update_charts(n_clicks, data):
         cts_table[j] = cts_table[i].map(map_color)
 
     # Insert color variable to a list (fill_color)
-    fill_color_cts = []
-    n = len(cts_table)
-    for col in cols_to_show:
-        if col not in output:
-            fill_color_cts.append(['white']*n)
-        else:
-            fill_color_cts.append(cts_table[str(col)+'_col'].to_list())
+    fill_color_cts = fill_color(cts_table)
             
     # Table and save as img
-    fig_cts = go.Figure(
-        data=[go.Table(
-            header=dict(values=[f"<b>{col}</b>" for col in [x.upper() for x in cols_to_show]],
-                        fill_color='#2a3f5f',
-                        line_color='white',
-                        align='center',
-                        font=dict(color='white', family="Verdana", size=20),
-                        height=35,
-                        ),
-            cells=dict(values=cts_table[cols_to_show].values.T,
-                    fill_color=fill_color_cts,
-                    line_color='lightgrey',
-                    align='center',
-                    font=dict(color='#2a3f5f', family="Verdana", size=20),
-                    height=35
-                    ),
-            columnwidth = [1,3,1,1.5,1.5,1.5,1.5,1.5,1.5,1.5,2.5],
-        )
-            ])
-    fig_cts.update_layout({'height':390,'width':2200,'plot_bgcolor': '#ffffff', 'paper_bgcolor': '#ffffff',
-                        'margin' : {'t':0, 'b':0, 'l':0, 'r':0}, "autosize": True})
-    pio.write_image(fig_cts, 'img/cts.png')
+    cts_img = table_cts(cts_table, fill_color_cts)
+    pio.write_image(cts_img, 'img/cts.png')
 
     ##### Tugboat
     # Mapping Color for each row and columns
@@ -355,37 +300,11 @@ def update_charts(n_clicks, data):
         tugboat_table[j] = tugboat_table[i].map(map_color)
 
     # Insert color variable to a list (fill_color)
-    fill_color_tugboat = []
-    n = len(tugboat_table)
-    for col in cols_to_show:
-        if col not in output:
-            fill_color_tugboat.append(['white']*n)
-        else:
-            fill_color_tugboat.append(tugboat_table[str(col)+'_col'].to_list())
+    fill_color_tugboat = fill_color(tugboat_table)
             
     # Table and save as img
-    fig_tugboat = go.Figure(
-        data=[go.Table(
-            header=dict(values=[f"<b>{col}</b>" for col in [x.upper() for x in cols_to_show]],
-                        fill_color='#2a3f5f',
-                        line_color='white',
-                        align='center',
-                        font=dict(color='white', family="Verdana", size=20),
-                        height=35,
-                        ),
-            cells=dict(values=tugboat_table[cols_to_show].values.T,
-                    fill_color=fill_color_tugboat,
-                    line_color='lightgrey',
-                    align='center',
-                    font=dict(color='#2a3f5f', family="Verdana", size=20),
-                    height=35
-                    ),
-            columnwidth = [1,3,1,1.5,1.5,1.5,1.5,1.5,1.5,1.5,2.5],
-        )
-            ])
-    fig_tugboat.update_layout({'height':720,'width':2200,'plot_bgcolor': '#ffffff', 'paper_bgcolor': '#ffffff',
-                        'margin' : {'t':0, 'b':0, 'l':0, 'r':0}, "autosize": True})
-    pio.write_image(fig_tugboat, 'img/tugboat.png')
+    tugboat_img = table_tugboat(tugboat_table, fill_color_tugboat)
+    pio.write_image(tugboat_img, 'img/tugboat.png')
 
     ##### Barge
     # Mapping Color for each row and columns
@@ -393,37 +312,11 @@ def update_charts(n_clicks, data):
         barge_table[j] = barge_table[i].map(map_color)
 
     # Insert color variable to a list (fill_color)
-    fill_color_barge = []
-    n = len(barge_table)
-    for col in cols_to_show:
-        if col not in output:
-            fill_color_barge.append(['white']*n)
-        else:
-            fill_color_barge.append(barge_table[str(col)+'_col'].to_list())
+    fill_color_barge = fill_color(barge_table)
             
     # Table and save as img
-    fig_barge = go.Figure(
-        data=[go.Table(
-            header=dict(values=[f"<b>{col}</b>" for col in [x.upper() for x in cols_to_show]],
-                        fill_color='#2a3f5f',
-                        line_color='white',
-                        align='center',
-                        font=dict(color='white', family="Verdana", size=20),
-                        height=35,
-                        ),
-            cells=dict(values=barge_table[cols_to_show].values.T,
-                    fill_color=fill_color_barge,
-                    line_color='lightgrey',
-                    align='center',
-                    font=dict(color='#2a3f5f', family="Verdana", size=20),
-                    height=35
-                    ),
-            columnwidth = [1,3,1,1.5,1.5,1.5,1.5,1.5,1.5,1.5,2.5],
-        )
-            ])
-    fig_barge.update_layout({'height':610,'width':2200,'plot_bgcolor': '#ffffff', 'paper_bgcolor': '#ffffff',
-                        'margin' : {'t':0, 'b':0, 'l':0, 'r':0}, "autosize": True})
-    pio.write_image(fig_barge, 'img/barge.png')
+    barge_img = table_barge(barge_table, fill_color_barge)
+    pio.write_image(barge_img, 'img/barge.png')
 
     #####
     path = os.getcwd()
@@ -472,3 +365,127 @@ def update_charts(n_clicks, data):
     return dcc.send_bytes(to_pptx, 'Certificate Dashboard.pptx'), download_date
 
 
+######################
+# Function
+######################
+# 1. Function fill_color
+def fill_color(table) :
+# Insert color variable to a list (fill_color)
+    fill = []
+    output = ['Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC']
+    cols_to_show = ['Type','Vessel Name','Class','Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC','Remarks']
+    n = len(table)
+    for col in cols_to_show:
+        if col not in output:
+            fill.append(['white']*n)
+        else:
+            fill.append(table[str(col)+'_col'].to_list())
+    return(fill)
+
+# 2. Table OGV
+def table_ogv(table, fill) :       
+    # Table and save as img
+    cols_to_show = ['Type','Vessel Name','Class','Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC','Remarks']
+    fig = go.Figure(
+        data=[go.Table(
+            header=dict(values=[f"<b>{col}</b>" for col in [x.upper() for x in cols_to_show]],
+                        fill_color='#2a3f5f',
+                        line_color='white',
+                        align='center',
+                        font=dict(color='white', family="Verdana", size=20),
+                        height=35,
+                        ),
+            cells=dict(values=table[cols_to_show].values.T,
+                    fill_color=fill,
+                    line_color='lightgrey',
+                    align='center',
+                    font=dict(color='#2a3f5f', family="Verdana", size=20),
+                    height=35
+                    ),
+            columnwidth = [1,3,1,1.5,1.5,1.5,1.5,1.5,1.5,1.5,2.5],
+        )
+            ])
+    fig.update_layout({'height':150,'width':2200,'plot_bgcolor': '#ffffff', 'paper_bgcolor': '#ffffff',
+                        'margin' : {'t':0, 'b':0, 'l':0, 'r':0}, "autosize": True})
+    return(fig)
+
+# 2. Table CTS
+def table_cts(table, fill) : 
+    # Table and save as img
+    cols_to_show = ['Type','Vessel Name','Class','Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC','Remarks']
+    fig = go.Figure(
+        data=[go.Table(
+            header=dict(values=[f"<b>{col}</b>" for col in [x.upper() for x in cols_to_show]],
+                        fill_color='#2a3f5f',
+                        line_color='white',
+                        align='center',
+                        font=dict(color='white', family="Verdana", size=20),
+                        height=35,
+                        ),
+            cells=dict(values=table[cols_to_show].values.T,
+                    fill_color=fill,
+                    line_color='lightgrey',
+                    align='center',
+                    font=dict(color='#2a3f5f', family="Verdana", size=20),
+                    height=35
+                    ),
+            columnwidth = [1,3,1,1.5,1.5,1.5,1.5,1.5,1.5,1.5,2.5],
+        )
+            ])
+    fig.update_layout({'height':390,'width':2200,'plot_bgcolor': '#ffffff', 'paper_bgcolor': '#ffffff',
+                        'margin' : {'t':0, 'b':0, 'l':0, 'r':0}, "autosize": True})
+    return(fig)
+
+# 3. Table Tugboat
+def table_tugboat(table, fill) : 
+    # Table and save as img
+    cols_to_show = ['Type','Vessel Name','Class','Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC','Remarks']
+    fig = go.Figure(
+        data=[go.Table(
+            header=dict(values=[f"<b>{col}</b>" for col in [x.upper() for x in cols_to_show]],
+                        fill_color='#2a3f5f',
+                        line_color='white',
+                        align='center',
+                        font=dict(color='white', family="Verdana", size=20),
+                        height=35,
+                        ),
+            cells=dict(values=table[cols_to_show].values.T,
+                    fill_color=fill,
+                    line_color='lightgrey',
+                    align='center',
+                    font=dict(color='#2a3f5f', family="Verdana", size=20),
+                    height=35
+                    ),
+            columnwidth = [1,3,1,1.5,1.5,1.5,1.5,1.5,1.5,1.5,2.5],
+        )
+            ])
+    fig.update_layout({'height':720,'width':2200,'plot_bgcolor': '#ffffff', 'paper_bgcolor': '#ffffff',
+                        'margin' : {'t':0, 'b':0, 'l':0, 'r':0}, "autosize": True})
+    return(fig)
+
+# 4. Table Barge
+def table_barge(table, fill) : 
+    # Table and save as img
+    cols_to_show = ['Type','Vessel Name','Class','Annual','Special','Intermediate','Docking','Tail Shaft','Boiler','COC','Remarks']
+    fig = go.Figure(
+        data=[go.Table(
+            header=dict(values=[f"<b>{col}</b>" for col in [x.upper() for x in cols_to_show]],
+                        fill_color='#2a3f5f',
+                        line_color='white',
+                        align='center',
+                        font=dict(color='white', family="Verdana", size=20),
+                        height=35,
+                        ),
+            cells=dict(values=table[cols_to_show].values.T,
+                    fill_color=fill,
+                    line_color='lightgrey',
+                    align='center',
+                    font=dict(color='#2a3f5f', family="Verdana", size=20),
+                    height=35
+                    ),
+            columnwidth = [1,3,1,1.5,1.5,1.5,1.5,1.5,1.5,1.5,2.5],
+        )
+            ])
+    fig.update_layout({'height':610,'width':2200,'plot_bgcolor': '#ffffff', 'paper_bgcolor': '#ffffff',
+                        'margin' : {'t':0, 'b':0, 'l':0, 'r':0}, "autosize": True})
+    return(fig)
