@@ -249,21 +249,8 @@ def update_charts(n_clicks, data):
     barge_table = data_table[data_table['Type'] == 'Barge']
 
     ##### Header
-    fig_header = go.Figure(
-        data=[go.Table(
-            header=dict(values=[f"<b>{col}</b>" for col in ['VESSEL', 'CLASS SURVEY']],
-                        fill_color='#2a3f5f',
-                        line_color='white',
-                        align='center',
-                        font=dict(color='white', family="Verdana", size=20),
-                        height=35,
-                        ),
-            columnwidth = [5,13],
-        )
-            ])
-    fig_header.update_layout({'height':40,'width':2200,'plot_bgcolor': '#ffffff', 'paper_bgcolor': '#ffffff',
-                        'margin' : {'t':0, 'b':0, 'l':0, 'r':0}, "autosize": True})
-    pio.write_image(fig_header, 'img/header.png')
+    header_img = table_header()
+    pio.write_image(header_img, 'img/header.png')
 
     ##### OGV
     # Mapping Color for each row and columns
@@ -381,6 +368,24 @@ def fill_color(table) :
         else:
             fill.append(table[str(col)+'_col'].to_list())
     return(fill)
+
+
+def table_header():
+    fig = go.Figure(
+        data=[go.Table(
+            header=dict(values=[f"<b>{col}</b>" for col in ['VESSEL', 'CLASS SURVEY']],
+                        fill_color='#2a3f5f',
+                        line_color='white',
+                        align='center',
+                        font=dict(color='white', family="Verdana", size=20),
+                        height=35,
+                        ),
+            columnwidth = [5,13],
+        )
+            ])
+    fig.update_layout({'height':40,'width':2200,'plot_bgcolor': '#ffffff', 'paper_bgcolor': '#ffffff',
+                        'margin' : {'t':0, 'b':0, 'l':0, 'r':0}, "autosize": True})
+    return(fig)
 
 # 2. Table OGV
 def table_ogv(table, fill) :       
